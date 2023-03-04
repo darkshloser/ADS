@@ -161,9 +161,27 @@ def FibonacciSearch(source, key):
 
 
 
+'''
+Title: Exponential Search
 
+Info:  It's also known by the names galloping search, doubling search
+       and Struzik search. It depends on the binary search to perform 
+       final comparison.
 
+Output:  Return the index of the first occurrence (if there is no 
+         such element it will return '-1')
 
+Complexity: Time complexity Best case O(log i) 'i' is the index of
+            the item we are searching for. Worst case O(log n)
+'''
+
+def ExponentialSearch(source, key):
+    if source[0] == key:
+        return 0
+    index = 1
+    while index < len(source) and source[index] <= key:
+        index = index * 2
+    return BinarySearch(source[:min(index, len(source))], key)
 
 
 
