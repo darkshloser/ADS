@@ -54,7 +54,8 @@ Info:  It was implemented by 'Divide and Conquer' methodology. It is
 Output:  Return the index of the first occurrence (if there is no 
          such element it will return '-1')
 
-Complexity: Time complexity is O(log n)
+Complexity: Time complexity is O(log n).
+            Space complexity O(1) for iterative, O(log n) for recursive.
 '''
 
 def BinarySearch(source, key):
@@ -71,6 +72,97 @@ def BinarySearch(source, key):
             else:
                 f_pos = mid + 1
     return index
+
+
+
+
+'''
+Title: Jump Search
+
+Info:  It's similar to Binary Search t works on sorted array and uses
+       similar 'Divide and Conquer' approach.
+       We search in jumps and when 'key' is between jumps like 
+       source[i] < key < source[i+jump] it will perform Linear search.
+
+
+Output:  Return the index of the first occurrence (if there is no 
+         such element it will return '-1')
+
+Complexity: Time complexity is O(sqrt(n))
+'''
+
+import math
+
+def JumpSearch(source, key):
+    length = len(source)
+    jump = int(math.sqrt(length))
+    i = 0
+
+    while i != length - 1 and source[i] < key:
+        if source[i+jump-1] == key:
+            return i+jump-1
+        elif source[i+jump-1] > key:
+            block = source[i: i+jump-1]
+            return i + LinearSearch(block, key)
+        i += jump
+    
+    block = source[i: i+jump]
+    return i + LinearSearch(block, key)
+
+
+
+
+'''
+Title: Fibonacci Search
+
+Info:  It's similar to binary and jump search.
+       It's using Fibonacci numbers to calculate the block size or
+       search range in each step.
+       Algorithm works with three fibonacci numbers at a time.
+       fib = fib_minus_1 + fib_minus_2. The advantage is that it 
+       handle arrays that are too large, because it searches in 
+       increasing step size.
+
+
+Output:  Return the index of the first occurrence (if there is no 
+         such element it will return '-1')
+
+Complexity: Time complexity is O(log n). The algorithm is faster than
+            Linear search and jump search in most cases.
+'''
+
+def FibonacciSearch(source, key):
+    fibM_minus_2 = 0
+    fibM_minus_1 = 1
+    fibM = fibM_minus_1 + fibM_minus_2
+    while (fibM < len(source)):
+        fibM_minus_2 = fibM_minus_1
+        fibM_minus_1 = fibM
+        fibM = fibM_minus_1 + fibM_minus_2
+    index = -1
+    while (fibM > 1):
+        i = min(index + fibM_minus_2, (len(source)-1))
+        if (source[i] < key):
+            fibM = fibM_minus_1
+            fibM_minus_1 = fibM_minus_2
+            fibM_minus_2 = fibM - fibM_minus_1
+            index = i
+        elif (source[i] > key):
+            fibM = fibM_minus_2
+            fibM_minus_1 = fibM_minus_1 - fibM_minus_2
+            fibM_minus_2 = fibM - fibM_minus_1
+        else :
+            return i
+    if(fibM_minus_1 and index < (len(source)-1) and source[index+1] == key):
+        return index+1
+    return -1
+
+
+
+
+
+
+
 
 
 
